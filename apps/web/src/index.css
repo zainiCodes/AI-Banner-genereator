@@ -1,2 +1,12 @@
 @import "@my-better-t-app/ui/globals.css";
 @source "../node_modules/streamdown/dist/*.js";
+
+@layer base {
+    body {
+        background:
+            radial-gradient(ellipse 120% 70% at 70% 80%, rgba(87, 24, 69, 0.20), transparent 52%),
+            radial-gradient(ellipse 160% 45% at 30% 30%, rgba(153, 27, 27, 0.16), transparent 58%),
+            radial-gradient(ellipse 85% 100% at 10% 60%, rgba(69, 26, 3, 0.22), transparent 46%),
+            #1c1917;
+    }
+}

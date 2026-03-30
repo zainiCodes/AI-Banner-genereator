@@ -1,7 +1,6 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
 import { getUser } from "@/functions/get-user";
-
 export const Route = createFileRoute("/dashboard")({
   component: RouteComponent,
   beforeLoad: async () => {
@@ -23,6 +22,7 @@ function RouteComponent() {
   return (
     <div>
       <h1>Dashboard</h1>
+      {/* <Button onClick={() => { console.log("ahhh he clicked me!") }}>click me</Button> */}
       <p>Welcome {session?.user.name}</p>
     </div>
   );

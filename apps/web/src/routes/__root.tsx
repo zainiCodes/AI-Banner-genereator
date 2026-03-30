@@ -2,11 +2,11 @@ import { Toaster } from "@my-better-t-app/ui/components/sonner";
 import { HeadContent, Outlet, Scripts, createRootRouteWithContext } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 
-import Header from "../components/header";
+import Navbar from "../components/home-page/component/Navbar";
 
 import appCss from "../index.css?url";
 
-export interface RouterAppContext {}
+export interface RouterAppContext { }
 
 export const Route = createRootRouteWithContext<RouterAppContext>()({
   head: () => ({
@@ -41,7 +41,7 @@ function RootDocument() {
       </head>
       <body>
         <div className="grid h-svh grid-rows-[auto_1fr]">
-          <Header />
+          <Navbar />
           <Outlet />
         </div>
         <Toaster richColors />
