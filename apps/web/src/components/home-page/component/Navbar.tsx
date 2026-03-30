@@ -29,7 +29,7 @@ export default function Navbar() {
   }, [location.pathname]);
 
   return (
-    <header className="sticky bg-transparent top-0 z-50 w-full">
+    <header className="w-full bg-transparent">
       <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-8">
         {/* Logo Side */}
         <div className="flex items-center gap-2">

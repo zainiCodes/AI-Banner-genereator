@@ -1,6 +1,10 @@
+import Header from "./component/header";
+
 export default function HomeComponent() {
     return (
-        <div>HomeComponent</div>
+        <div>
+            <Header />
+        </div>
     )
 }
 
