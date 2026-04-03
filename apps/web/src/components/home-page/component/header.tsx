@@ -1,6 +1,5 @@
 import { Button } from "@my-better-t-app/ui/components/button";
 import { Check, ChevronRight, Video } from "lucide-react";
-import * as React from "react";
 
 export default function Header() {
     return (
@@ -32,16 +31,13 @@ export default function Header() {
 
             {/* Actions / Buttons */}
             <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row w-full sm:w-auto px-4">
-                <Button
-                    className="h-12 w-full sm:w-auto rounded-full bg-violet-600 px-8 text-sm font-medium text-white shadow-lg shadow-violet-600/20 transition-all hover:bg-violet-700"
-                >
+                <Button size={"lg"}>
                     Generate now
                 </Button>
                 <Button
-                    variant="outline"
-                    className="h-12 w-full sm:w-auto rounded-full border-white/20 bg-transparent px-8 text-sm font-medium text-white transition-all hover:bg-white/5"
+                    variant="glass"
+                    size={"lg"}
                 >
-                    <Video className="mr-2 h-4 w-4" />
                     See how it works
                 </Button>
             </div>
