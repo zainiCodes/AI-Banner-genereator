@@ -5,6 +5,7 @@ import z from "zod"
 import { RectangleHorizontal, Square, RectangleVertical } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@my-better-t-app/ui/components/select"
 import { Button } from "@my-better-t-app/ui/components/button"
+import { Textarea } from "@my-better-t-app/ui/components/textarea"
 import {
     Card,
     CardContent,
@@ -26,14 +27,15 @@ import { Label } from "@my-better-t-app/ui/components/label"
 const formSchema = z.object({
     title: z
         .string()
-        .min(5, "Bug title must be at least 5 characters.")
-        .max(32, "Bug title must be at most 32 characters."),
+        .min(5, "Title must be greater then 5 characters"),
     AspectRatio: z
         .enum(['16:9', '1:1', "9:16"]),
     thumbNailStyle: z
         .enum(["Bold and Graphic", "black and white"]),
     themes: z
-        .enum(["sunset", "cool", "forest", "neon"])
+        .enum(["sunset", "cool", "forest", "neon"]),
+    optional: z
+        .string()
 })
 
 const themes = [
@@ -61,7 +63,8 @@ export default function DashboardForm() {
             title: "",
             AspectRatio: "16:9",
             thumbNailStyle: "Bold and Graphic",
-            themes: "sunset"
+            themes: "sunset",
+            optional: ""
         },
         validators: {
             onSubmit: formSchema,
@@ -202,49 +205,63 @@ export default function DashboardForm() {
                         </form.Field>
                         <form.Field name="themes">
                             {(field) => (
-                                <div className="space-y-3">
-                                    <FieldLabel className="pt-3">Themes</FieldLabel>
+                                <div>
+                                    <FieldLabel>Themes</FieldLabel>
 
                                     <RadioGroup
-                                        value={field.name}
-                                        onValueChange={(val) => { field.handleChange(val as string) }}
+                                        name={field.name}
+                                        value={field.state.value}
+                                        onValueChange={(val) => field.handleChange(val)}
                                         className="flex flex-wrap gap-3"
                                     >
-                                        {themes.map((theme) => (
-                                            <div key={theme.id}>
-                                                <RadioGroupItem
-                                                    value={theme.id}
-                                                    id={theme.id}
-                                                    className="peer sr-only"
-                                                />
+                                        {themes.map((theme) => {
+                                            const isSelected = field.state.value === theme.id
+                                            return (
+                                                <div key={theme.id}>
+                                                    <RadioGroupItem
+                                                        value={theme.id}
+                                                        id={theme.id}
+                                                        className="peer sr-only"
+                                                    />
 
-                                                <Label
-                                                    htmlFor={theme.id}
-                                                    className="
-              flex gap-1 p-1 rounded-xl border cursor-pointer
-              transition-all
-
-              hover:scale-105
-
-              peer-data-[state=checked]:border-primary
-              peer-data-[state=checked]:ring-2
-              peer-data-[state=checked]:ring-primary/30
-            "
-                                                >
-                                                    {theme.colors.map((color, i) => (
-                                                        <span
-                                                            key={i}
-                                                            className="w-6 h-6 rounded-md"
-                                                            style={{ backgroundColor: color }}
-                                                        />
-                                                    ))}
-                                                </Label>
-                                            </div>
-                                        ))}
+                                                    <Label
+                                                        htmlFor={theme.id}
+                                                        className={`
+                                                                flex gap-1 p-1 border cursor-pointer
+                                                                transition-all duration-200 hover:scale-105
+                                                                ${isSelected
+                                                                ? "border-primary ring-2 ring-primary/30 scale-105 shadow-sm"
+                                                                : "border-muted"}
+                `}
+                                                    >
+                                                        {theme.colors.map((color, i) => (
+                                                            <span
+                                                                key={i}
+                                                                className="w-6 h-6"
+                                                                style={{ backgroundColor: color }}
+                                                            />
+                                                        ))}
+                                                    </Label>
+                                                </div>
+                                            )
+                                        })}
                                     </RadioGroup>
                                 </div>
                             )}
                         </form.Field>
+
+                        <form.Field
+                            name="optional"
+                            children={(field) => {
+                                return (
+                                    <Field>
+                                        <FieldLabel className="pt-3" htmlFor={field.name}>Additional Prompt (optional)</FieldLabel>
+                                        <Textarea className="rounded-none p-2 h-20" placeholder="Enter your details" />
+
+                                    </Field>
+                                )
+                            }}
+                        />
 
 
                     </FieldGroup>
@@ -252,11 +269,8 @@ export default function DashboardForm() {
             </CardContent>
             <CardFooter>
                 <Field orientation="horizontal">
-                    <Button type="button" variant="outline" onClick={() => form.reset()}>
-                        Reset
-                    </Button>
-                    <Button type="submit" form="bug-report-form">
-                        Submit
+                    <Button type="submit" className={"w-full "} form={"bug-report-form"}>
+                        Generate Now
                     </Button>
                 </Field>
             </CardFooter>
