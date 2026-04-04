@@ -1,8 +1,9 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
 import { getUser } from "@/functions/get-user";
+import Dashboard from "@/components/dashboard/Dashboard"
 export const Route = createFileRoute("/dashboard")({
-  component: RouteComponent,
+  component: Dashboard,
   beforeLoad: async () => {
     const session = await getUser();
     return { session };
@@ -15,15 +16,3 @@ export const Route = createFileRoute("/dashboard")({
     }
   },
 });
-
-function RouteComponent() {
-  const { session } = Route.useRouteContext();
-
-  return (
-    <div>
-      <h1>Dashboard</h1>
-      {/* <Button onClick={() => { console.log("ahhh he clicked me!") }}>click me</Button> */}
-      <p>Welcome {session?.user.name}</p>
-    </div>
-  );
-}

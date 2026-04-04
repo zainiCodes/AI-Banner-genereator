@@ -1,5 +1,5 @@
 import { Button } from "@my-better-t-app/ui/components/button";
-import { Check, ChevronRight, Video } from "lucide-react";
+import { Check, ChevronRight } from "lucide-react";
 
 export default function Header() {
     return (

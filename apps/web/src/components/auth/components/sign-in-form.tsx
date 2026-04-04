@@ -121,11 +121,10 @@ export default function LoginForm() {
         </form>
       </CardContent>
       <CardFooter className="flex justify-center">
-        <Button
-          variant="link"
-        >
-          Need an Account? <span className="text-white"><Link to={"/signUp"}>Sign Up</Link></span>
-        </Button>
+        <p className="text-white">
+          Need an Account? <span className="text-purple-500"><Link to={"/signUp"}>Sign Up</Link></span>
+        </p>
+
       </CardFooter>
 
     </Card>
