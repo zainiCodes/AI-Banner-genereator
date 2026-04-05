@@ -5,7 +5,7 @@ export default function Dashboard() {
     return (
         <div className="flex justify-center gap-7  h-screen">
             <DashboardForm />
-            <DashboardOutput />
+            <DashboardOutput aspect={16 / 9} />
         </div>
     )
 }
