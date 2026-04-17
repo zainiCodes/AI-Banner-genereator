@@ -1,8 +1,9 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
-
 import { getUser } from "@/functions/get-user";
-import Dashboard from "@/components/dashboard/Dashboard"
+// import { lazy } from "react";
+import Dashboard from "@/features/dashboard/Dashboard";
 export const Route = createFileRoute("/dashboard")({
+  // component: lazy(() => import("@/features/dashboard/Dashboard")),
   component: Dashboard,
   beforeLoad: async () => {
     const session = await getUser();

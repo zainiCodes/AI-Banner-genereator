@@ -4,7 +4,7 @@ import { Label } from "@my-better-t-app/ui/components/label";
 import { useForm } from "@tanstack/react-form";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
-import z, { email } from "zod";
+import z from "zod";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@my-better-t-app/ui/components/card"
 
 import { authClient } from "@/lib/auth-client";

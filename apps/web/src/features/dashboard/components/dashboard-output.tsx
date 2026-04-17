@@ -5,12 +5,16 @@ import {
     CardContent,
 } from "@my-better-t-app/ui/components/card"
 import { AspectRatio } from "@my-better-t-app/ui/components/aspect-ratio"
+import { useModelData } from "@/store/useModelData"
 
-export default function DashboardOutput({
-    aspect = 16 / 9,
-}: {
-    aspect: number
-}) {
+export default function DashboardOutput() {
+    const { modelData } = useModelData()
+    const ratio =
+        modelData.AspectRatio
+            ?.split(":")
+            .map(Number);
+
+    const aspectRatio = ratio ? ratio[0] / ratio[1] : 1;
     return (
         <Card className="w-full h-fit max-w-md">
             <CardHeader>
@@ -19,10 +23,10 @@ export default function DashboardOutput({
 
             <CardContent>
                 <AspectRatio
-                    ratio={aspect}
+                    ratio={aspectRatio}
                     className="bg-muted overflow-hidden border transition-all duration-300"
                 >{
-                        aspect === 16 / 9 ? (
+                        aspectRatio === 16 / 9 ? (
                             <img
                                 src="https://images.unsplash.com/photo-1775149649911-2714110db00b?q=80&w=774&auto=format&fit=crop"
                                 alt="Preview"

@@ -1,5 +1,5 @@
 import { create } from "zustand"
-import { formSchema } from "../components/dashboard/components/dashboard-form"
+import { formSchema } from "../features/dashboard/components/dashboard-form"
 import z from "zod"
 
 interface useModelData {

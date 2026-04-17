@@ -58,16 +58,15 @@ const themes = [
     },
 ]
 
-const { setModelData } = useModelData()
-
 export default function DashboardForm() {
+    const { setModelData, modelData } = useModelData()
     const form = useForm({
         defaultValues: {
-            title: "",
-            AspectRatio: "16:9",
-            thumbNailStyle: "Bold and Graphic",
-            themes: "sunset",
-            optional: ""
+            title: modelData.title,
+            AspectRatio: modelData.AspectRatio,
+            thumbNailStyle: modelData.thumbNailStyle,
+            themes: modelData.themes,
+            optional: modelData.optional
         } as z.infer<typeof formSchema>,
         validators: {
             onSubmit: formSchema,
@@ -80,7 +79,6 @@ export default function DashboardForm() {
                 thumbNailStyle: value.thumbNailStyle,
                 themes: value.themes,
                 optional: value.optional
-
             })
             toast("You submitted the following values:", {
                 description: (
@@ -150,7 +148,12 @@ export default function DashboardForm() {
                                             defaultValue='16:9'
                                             name={field.name}
                                             value={field.state.value}
-                                            onValueChange={(val) => field.handleChange(val)}
+                                            onValueChange={(val) => {
+                                                field.handleChange(val)
+                                                setModelData({ ...modelData, AspectRatio: val })
+                                            }
+
+                                            }
                                             className="flex flex-row w-full gap-2"
                                         >
                                             <div className="flex-1 relative">
@@ -194,9 +197,10 @@ export default function DashboardForm() {
                                     <FieldLabel className="pt-3">Thumbnail Style</FieldLabel>
 
                                     <Select
+                                        name={field.name}
                                         value={field.state.value}
-                                        onValueChange={(val) => { field.handleChange(val) }}
-
+                                        onValueChange={(val) => { field.handleChange(val as any) }}
+                                        defaultValue={field.state.value}
                                     >
                                         <SelectTrigger>
                                             <SelectValue placeholder="Select style" />
