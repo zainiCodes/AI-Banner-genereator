@@ -23,15 +23,16 @@ import {
 import { Input } from "@my-better-t-app/ui/components/input"
 import { RadioGroup, RadioGroupItem } from "@my-better-t-app/ui/components/radio-group"
 import { Label } from "@my-better-t-app/ui/components/label"
+import { useModelData } from "@/store/useModelData"
 
-const formSchema = z.object({
+export const formSchema = z.object({
     title: z
         .string()
         .min(5, "Title must be greater then 5 characters"),
     AspectRatio: z
         .enum(['16:9', '1:1', "9:16"]),
     thumbNailStyle: z
-        .enum(["Bold and Graphic", "black and white"]),
+        .enum(["Bold and Graphic", "Black and White"]),
     themes: z
         .enum(["sunset", "cool", "forest", "neon"]),
     optional: z
@@ -57,6 +58,8 @@ const themes = [
     },
 ]
 
+const { setModelData } = useModelData()
+
 export default function DashboardForm() {
     const form = useForm({
         defaultValues: {
@@ -65,12 +68,20 @@ export default function DashboardForm() {
             thumbNailStyle: "Bold and Graphic",
             themes: "sunset",
             optional: ""
-        },
+        } as z.infer<typeof formSchema>,
         validators: {
             onSubmit: formSchema,
         },
 
         onSubmit: async ({ value }) => {
+            setModelData({
+                title: value.title,
+                AspectRatio: value.AspectRatio,
+                thumbNailStyle: value.thumbNailStyle,
+                themes: value.themes,
+                optional: value.optional
+
+            })
             toast("You submitted the following values:", {
                 description: (
                     <pre className="mt-2 w-[320px] overflow-x-auto rounded-md bg-code p-4 text-code-foreground">
@@ -139,7 +150,7 @@ export default function DashboardForm() {
                                             defaultValue='16:9'
                                             name={field.name}
                                             value={field.state.value}
-                                            onValueChange={(val) => field.handleChange(val as string)}
+                                            onValueChange={(val) => field.handleChange(val)}
                                             className="flex flex-row w-full gap-2"
                                         >
                                             <div className="flex-1 relative">
@@ -184,7 +195,7 @@ export default function DashboardForm() {
 
                                     <Select
                                         value={field.state.value}
-                                        onValueChange={(val) => { field.handleChange(val as string) }}
+                                        onValueChange={(val) => { field.handleChange(val) }}
 
                                     >
                                         <SelectTrigger>
