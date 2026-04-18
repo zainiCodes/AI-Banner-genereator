@@ -3,8 +3,13 @@ import { formSchema } from "../features/dashboard/components/dashboard-form"
 import z from "zod"
 
 interface useModelData {
-    modelData: z.infer<typeof formSchema>,
+    modelData: z.infer<typeof formSchema>
     setModelData: (modelData: z.infer<typeof formSchema>) => void
+    
+    isGenerating: boolean
+    setIsGenerating: (loading: boolean) => void
+    generatedImage: { base64: string, mimeType: string } | null
+    setGeneratedImage: (image: { base64: string, mimeType: string } | null) => void
 }
 
 export const useModelData = create<useModelData>((set) => ({
@@ -16,4 +21,9 @@ export const useModelData = create<useModelData>((set) => ({
         optional: ""
     },
     setModelData: (modelData) => set({ modelData }),
+
+    isGenerating: false,
+    setIsGenerating: (isGenerating) => set({ isGenerating }),
+    generatedImage: null,
+    setGeneratedImage: (generatedImage) => set({ generatedImage }),
 }))

@@ -1,4 +1,3 @@
-import * as React from "react"
 import { useForm } from "@tanstack/react-form"
 import { toast } from "sonner"
 import z from "zod"
@@ -24,6 +23,8 @@ import { Input } from "@my-better-t-app/ui/components/input"
 import { RadioGroup, RadioGroupItem } from "@my-better-t-app/ui/components/radio-group"
 import { Label } from "@my-better-t-app/ui/components/label"
 import { useModelData } from "@/store/useModelData"
+import { useServerFn } from "@tanstack/react-start"
+import { generateBanner } from "@/functions/model-working/banner-func"
 
 export const formSchema = z.object({
     title: z
@@ -59,7 +60,9 @@ const themes = [
 ]
 
 export default function DashboardForm() {
-    const { setModelData, modelData } = useModelData()
+    const { setModelData, modelData, isGenerating, setIsGenerating, setGeneratedImage } = useModelData()
+    const generateFn = useServerFn(generateBanner)
+
     const form = useForm({
         defaultValues: {
             title: modelData.title,
@@ -73,27 +76,20 @@ export default function DashboardForm() {
         },
 
         onSubmit: async ({ value }) => {
-            setModelData({
-                title: value.title,
-                AspectRatio: value.AspectRatio,
-                thumbNailStyle: value.thumbNailStyle,
-                themes: value.themes,
-                optional: value.optional
-            })
-            toast("You submitted the following values:", {
-                description: (
-                    <pre className="mt-2 w-[320px] overflow-x-auto rounded-md bg-code p-4 text-code-foreground">
-                        <code>{JSON.stringify(value, null, 2)}</code>
-                    </pre>
-                ),
-                position: "bottom-right",
-                classNames: {
-                    content: "flex flex-col gap-2",
-                },
-                style: {
-                    "--border-radius": "calc(var(--radius)  + 4px)",
-                } as React.CSSProperties,
-            })
+
+            try {
+                setIsGenerating(true)
+                toast.loading("Generating your banner...", { id: "generate-banner" })
+
+                const result = await generateFn({ data: value })
+                setGeneratedImage(result)
+
+                toast.success("Banner generated successfully!", { id: "generate-banner" })
+            } catch (error: any) {
+                toast.error(error.message || "Failed to generate banner", { id: "generate-banner" })
+            } finally {
+                setIsGenerating(false)
+            }
         },
     })
 
@@ -126,7 +122,10 @@ export default function DashboardForm() {
                                             id={field.name}
                                             name={field.name}
                                             value={field.state.value}
-                                            onChange={(e) => field.handleChange(e.target.value)}
+                                            onChange={(e) => {
+                                                field.handleChange(e.target.value)
+                                                setModelData({ ...modelData, title: e.target.value })
+                                            }}
                                             aria-invalid={isInvalid}
                                             placeholder="Enter your banner title"
                                             autoComplete="off"
@@ -199,7 +198,10 @@ export default function DashboardForm() {
                                     <Select
                                         name={field.name}
                                         value={field.state.value}
-                                        onValueChange={(val) => { field.handleChange(val as any) }}
+                                        onValueChange={(val) => {
+                                            field.handleChange(val as any)
+                                            setModelData({ ...modelData, thumbNailStyle: val as any })
+                                        }}
                                         defaultValue={field.state.value}
                                     >
                                         <SelectTrigger>
@@ -226,7 +228,10 @@ export default function DashboardForm() {
                                     <RadioGroup
                                         name={field.name}
                                         value={field.state.value}
-                                        onValueChange={(val) => field.handleChange(val)}
+                                        onValueChange={(val) => {
+                                            field.handleChange(val)
+                                            setModelData({ ...modelData, themes: val })
+                                        }}
                                         className="flex flex-wrap gap-3"
                                     >
                                         {themes.map((theme) => {
@@ -271,8 +276,11 @@ export default function DashboardForm() {
                                 return (
                                     <Field>
                                         <FieldLabel className="pt-3" htmlFor={field.name}>Additional Prompt (optional)</FieldLabel>
-                                        <Textarea className="rounded-none p-2 h-20" placeholder="Enter your details" />
+                                        <Textarea className="rounded-none p-2 h-20" placeholder="Enter your details" onChange={(e) => {
+                                            field.handleChange(e.target.value)
+                                            setModelData({ ...modelData, optional: e.target.value })
 
+                                        }} />
                                     </Field>
                                 )
                             }}
@@ -284,8 +292,8 @@ export default function DashboardForm() {
             </CardContent>
             <CardFooter>
                 <Field orientation="horizontal">
-                    <Button type="submit" className={"w-full "} form={"bug-report-form"}>
-                        Generate Now
+                    <Button disabled={isGenerating} type="submit" className={"w-full "} form={"bug-report-form"}>
+                        {isGenerating ? "Generating..." : "Generate Now"}
                     </Button>
                 </Field>
             </CardFooter>

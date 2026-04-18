@@ -1,6 +1,6 @@
 import { Toaster } from "@my-better-t-app/ui/components/sonner";
 import { HeadContent, Outlet, Scripts, createRootRouteWithContext } from "@tanstack/react-router";
-import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
+// import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 
 import Navbar from "../features/home-page/component/Navbar";
 
@@ -45,7 +45,7 @@ function RootDocument() {
           <Outlet />
         </div>
         <Toaster richColors />
-        <TanStackRouterDevtools position="bottom-left" />
+        {/* <TanStackRouterDevtools position="bottom-left" /> */}
         <Scripts />
       </body>
     </html>
